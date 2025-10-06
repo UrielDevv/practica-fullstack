@@ -5,8 +5,10 @@ import com.practicafllstck.practica_fullstack.model.Producto;
 import com.practicafllstck.practica_fullstack.repository.ProductoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-import java.util.List;
+//import java.util.List;
 import java.util.Optional;
 
 @Service // Anotación que marca esta clase como un componente de servicio de Spring
@@ -16,9 +18,14 @@ public class ProductoService {
     @Autowired
     private ProductoRepository productoRepository;
 
-    // Método para obtener todos los productos
+    /*  Método para obtener todos los productos
     public List<Producto> findAll() {
         return productoRepository.findAll();
+    }
+    */
+
+    public Page<Producto> findAll(Pageable pageable) {
+        return productoRepository.findAll(pageable);
     }
 
     // Método para obtener un producto por su ID
