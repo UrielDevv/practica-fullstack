@@ -1,1 +1,34 @@
-<p>formulario works!</p>
+<div>
+  <h2>Formulario de Producto</h2>
+  <form [formGroup]="productoForm" (ngSubmit)="guardarProducto()">
+    <div>
+      <label for="nombre">Nombre:</label>
+      <input type="text" id="nombre" formControlName="nombre">
+      <div *ngIf="f['nombre'].invalid && (f['nombre'].dirty || f['nombre'].touched)" style="color: red;">
+        <small *ngIf="f['nombre'].errors?.['required']">El nombre es requerido.</small>
+        <small *ngIf="f['nombre'].errors?.['minlength']">El nombre debe tener al menos 3 caracteres.</small>
+      </div>
+    </div>
+
+    <div>
+      <label for="precio">Precio:</label>
+      <input type="number" id="precio" formControlName="precio">
+      <div *ngIf="f['precio'].invalid && (f['precio'].dirty || f['precio'].touched)" style="color: red;">
+        <small *ngIf="f['precio'].errors?.['required']">El precio es requerido.</small>
+        <small *ngIf="f['precio'].errors?.['min']">El precio debe ser mayor que cero.</small>
+      </div>
+    </div>
+    
+    <div>
+      <label for="existencias">Existencias:</label>
+      <input type="number" id="existencias" formControlName="existencias">
+      <div *ngIf="f['existencias'].invalid && (f['existencias'].dirty || f['existencias'].touched)" style="color: red;">
+        <small *ngIf="f['existencias'].errors?.['required']">Las existencias son requeridas.</small>
+        <small *ngIf="f['existencias'].errors?.['min']">Las existencias no pueden ser negativas.</small>
+      </div>
+    </div>
+
+    <br>
+    <button type="submit" [disabled]="productoForm.invalid">Guardar</button>
+  </form>
+</div>

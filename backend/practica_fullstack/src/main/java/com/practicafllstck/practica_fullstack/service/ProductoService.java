@@ -18,12 +18,6 @@ public class ProductoService {
     @Autowired
     private ProductoRepository productoRepository;
 
-    /*  Método para obtener todos los productos
-    public List<Producto> findAll() {
-        return productoRepository.findAll();
-    }
-    */
-
     public Page<Producto> findAll(Pageable pageable) {
         return productoRepository.findAll(pageable);
     }

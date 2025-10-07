@@ -1,1 +1,40 @@
-<p>lista-productos works!</p>
+<div>
+  <h2>Lista de Productos</h2>
+
+  <div *ngIf="isLoading" style="text-align: center; padding: 50px;">
+    <p>Cargando...</p>
+    </div>
+
+  <div *ngIf="!isLoading && error" style="color: red; text-align: center; padding: 50px;">
+    <h3>Error</h3>
+    <p>{{ error }}</p>
+    <button (click)="cargarProductos()">Reintentar</button>
+  </div>
+
+  <div *ngIf="!isLoading && !error">
+    <div *ngIf="productos.length === 0" style="text-align: center; padding: 50px;">
+      <p>No se encontraron productos.</p>
+    </div>
+
+    <table *ngIf="productos.length > 0 " border="1" style="width: 100%; border-collapse: collapse;">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Marca</th>
+          <th>Precio</th>
+          <th>Existencias</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let producto of productos">
+          <td>{{ producto.id }}</td>
+          <td>{{ producto.nombre }}</td>
+          <td>{{ producto.marca }}</td>
+          <td>{{ producto.precio | currency }}</td>
+          <td>{{ producto.existencias }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
