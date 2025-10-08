@@ -19,7 +19,7 @@ export class LoginComponent {
   onLogin(): void {
     // Lógica de simulación: Comparamos con valores fijos
     if (this.email === 'test@correo.com' && this.password === '123456') {
-      this.router.navigate(['/productos']);
+      this.router.navigate(['/dashboard']);
     } else {
       alert('Error: Correo o contraseña incorrectos.');
     }
