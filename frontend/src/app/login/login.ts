@@ -1,7 +1,11 @@
 import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
+  standalone: true,
+  imports: [FormsModule],
   templateUrl: './login.html'
 })
 export class LoginComponent {
@@ -9,14 +13,13 @@ export class LoginComponent {
   email = '';
   password = '';
 
-  constructor() {}
+  constructor(private router: Router) {}
 
   // Este método se ejecuta cuando se envía el formulario
   onLogin(): void {
     // Lógica de simulación: Comparamos con valores fijos
     if (this.email === 'test@correo.com' && this.password === '123456') {
-      alert('¡Inicio de sesión exitoso!');
-      // Aquí, en una app real, redirigirías al usuario a otra página.
+      this.router.navigate(['/productos']);
     } else {
       alert('Error: Correo o contraseña incorrectos.');
     }
