@@ -1,1 +1,36 @@
-<p>detalle-productos works!</p>
+<form [formGroup]="detalleForm" (ngSubmit)="buscarproductodetalle()">
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Marca</th>
+            <th>Precio</th>
+            <th>Existencias</th>
+            <th>Razón</th>
+            <th>Categoría</th>
+            <th>Activo</th>
+        </tr>
+        <tr>
+            <td><input type="text" id="id" formControlName="id"/>
+                <div *ngIf="f['id'].invalid && f['id'].touched" style="color: red;">
+                    <small *ngIf="f['id'].errors?.['required']">El ID es requerido.</small>
+                </div>
+            </td>
+            <td><input type="text" id="nombre" formControlName="nombre" /></td>
+            <td><input type="text" id="marca" formControlName="marca" /></td>
+            <td><input type="number" id="precio" formControlName="precio" /></td>
+            <td><input type="number" id="existencias" formControlName="existencias" /></td>
+            <td><input type="text" id="razon" formControlName="razon" /></td>
+            <td><input type="text" id="categoria" formControlName="categoria" /></td>
+            <td><select formControlName="subcategoria" id="subcategoria">
+                <option value="true">SI</option>
+                <option value="false">NO</option>
+            </select></td>
+        </tr>
+        <tr>
+            <td colspan="8">
+                <button type="submit">Buscar</button>
+            </td>
+        </tr>
+    </table>
+</form>
