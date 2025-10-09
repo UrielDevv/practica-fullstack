@@ -48,9 +48,25 @@ export class FormularioProductoComponent implements OnInit {
     );
   }
 
+  editarProducto(): void {
+    if (this.productoForm.invalid) {
+      this.productoForm.markAllAsTouched(); // Marca todos los campos como "tocados" para mostrar errores
+      return;
+    }
+/*
+    this.productoService.editarProducto(this.productoForm.value).subscribe(
+      response => {
+        console.log('Producto editado:', response);
+        // Aquí podrías redirigir al usuario o mostrar un mensaje de éxito
+      },
+      error => {
+        console.error('Error al editar producto:', error);
+        // Aquí podrías mostrar un mensaje de error al usuario
+      }
+    );
+*/
+    }
 
-
-  
   get f() {
     return this.productoForm.controls;
   }
