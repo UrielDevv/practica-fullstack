@@ -1,6 +1,5 @@
 <div class="header-container">
   <h2>Gestión de Productos</h2>
-  <!--<a routerLink="/dashboard/productos/nuevo" class="btn-crear">Crear Producto</a>-->
 </div>
 
 <div *ngIf="isLoading" style="text-align: center; padding: 50px;">
@@ -12,6 +11,12 @@
   <p>{{ error }}</p>
 </div>
 
+<div>
+  <button routerLink="/dashboard/productos/crearProducto" class="add-product-button">Agregar Producto</button>
+  <button routerLink="/dashboard/productos/id" class="add-product-button">Buscar</button>
+  <button routerLink="/dashboard/productos/actualizar-productos" class="add-product-button">Actualizar Productos</button>
+</div>
+
 <div *ngIf="!isLoading && !error">
   <table class="products-table" *ngIf="productos.length > 0">
     <thead>
@@ -21,6 +26,9 @@
         <th>Marca</th>
         <th>Precio</th>
         <th>Existencias</th>
+        <th>Razon</th>
+        <th>Activo</th>
+        <th>Acciones</th>
       </tr>
     </thead>
     <tbody>
@@ -30,6 +38,14 @@
         <td>{{ producto.marca }}</td>
         <td>{{ producto.precio | currency }}</td>
         <td>{{ producto.existencias }}</td>
+        <td>{{ producto.razon }}</td>
+        <td>{{ producto.activo }}</td>
+        <td>
+          <a [routerLink]="['/dashboard/productos', producto.id, 'editar']">Actualizar</a>
+          <a [routerLink]="['/dashboard/productos', producto.id, 'ajuste-inventario']">Activar</a>
+          <a [routerLink]="['/dashboard/productos', producto.id, 'ajuste-inventario']">Desactivar</a>
+          <a [routerLink]="['/dashboard/productos', producto.id, 'ajuste-inventario']">Eliminar</a>
+        </td>
       </tr>
     </tbody>
   </table>
@@ -37,4 +53,7 @@
   <div *ngIf="productos.length === 0" style="text-align: center; padding: 50px;">
     <p>No se encontraron productos para mostrar.</p>
   </div>
+
 </div>
+
+

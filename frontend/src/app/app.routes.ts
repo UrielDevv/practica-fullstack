@@ -14,10 +14,12 @@ export const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent, canActivate: [authGuard],
     children: [
       { path: 'productos', component: ListaProductosComponent  }, // Muestra la lista de productos
-      { path: 'productos/new', component: FormularioProductoComponent}, // Muestra el formulario para crear un producto
+      { path: 'productos/crearProducto', component: FormularioProductoComponent}, // Muestra el formulario para crear un producto
       { path: 'productos/:id', component: DetalleProductos }, // Muestra el detalle de un producto específico
-      { path: 'productos/:id/edit', component: FormularioProductoComponent }, // Reutiliza el formulario para editar
-      { path: 'productos/:id/adjust-stock', component: AjusteInventario } // Para ajustar inventario
+      { path: 'productos/:id/editar', component: FormularioProductoComponent }, // Reutiliza el formulario para editar
+      { path: 'productos/:id/ajuste-inventario', component: AjusteInventario }, // Para ajustar inventario
+      { path: 'productos/actualizar-productos', component: FormularioProductoComponent }, // Para actualizar producto
+      
     ]
   },
   {path: '', redirectTo: '/dashboard', pathMatch: 'full' },

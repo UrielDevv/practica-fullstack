@@ -11,6 +11,7 @@ export interface Producto {
   precio: number;
   existencias: number;
   activo: boolean;
+  razon?: string;
 }
 
 @Injectable({

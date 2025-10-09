@@ -9,7 +9,7 @@ import { RouterModule } from '@angular/router';
   standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './lista-productos.html',
-  styleUrl: './lista-productos.css'
+  //styleUrl: './lista-productos.css'
 })
 
 export class ListaProductosComponent implements OnInit {
