@@ -42,4 +42,7 @@ public class Producto {
 
     @Column // Campo estándar
     private boolean activo = true; // Por defecto, el producto está activo
+
+    @Column
+    private String razon;
 }

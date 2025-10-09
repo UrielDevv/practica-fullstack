@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, PLATFORM_ID,inject } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 
 @Component({
@@ -9,11 +10,14 @@ import { Router, RouterModule } from '@angular/router';
   // styleUrls: ['./dashboard.component.css'] // Opcional, para estilos
 })
 export class DashboardComponent {
+  private platformId = inject(PLATFORM_ID);
+
   constructor(private router: Router) {}
 
   logout(): void {
-    // En una app real, llamarías a un authService.logout()
-    console.log('Cerrando sesión...');
+    if (isPlatformBrowser(this.platformId)) {
+      sessionStorage.removeItem('isLoggedIn'); // Elimina el estado de inicio de sesión
+    }
     this.router.navigate(['/login']);
   }
 }

@@ -1,5 +1,6 @@
 package com.practicafllstck.practica_fullstack.controller;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import com.practicafllstck.practica_fullstack.model.Producto;
 import com.practicafllstck.practica_fullstack.service.ProductoService;
 import jakarta.validation.Valid;
@@ -13,6 +14,8 @@ import java.util.Optional;
 
 @RestController // Combina @Controller y @ResponseBody. Marca la clase como un controlador REST.
 @RequestMapping("/productos") // Mapea todas las peticiones que empiecen con /productos a este controlador.
+@CrossOrigin(origins = "http://localhost:4200") // Permite solicitudes CORS desde el frontend
+
 public class ProductoController {
 
     @Autowired
@@ -79,27 +82,27 @@ public class ProductoController {
      
     @PostMapping("/{id}/ajustar")
     public ResponseEntity<Producto> ajustarInventario(@PathVariable Long id, @RequestBody AjusteRequest ajuste) {
-        // 1. Validar la razón del ajuste
+        // a. Validar la razón del ajuste
         if (ajuste.razon == null || ajuste.razon.isBlank()) {
             return ResponseEntity.badRequest().build(); // Devuelve 400 Bad Request
         }
 
-        // 2. Buscar el producto
+        // b. Buscar el producto
         Optional<Producto> productoOptional = productoService.findById(id);
         if (productoOptional.isEmpty()) {
             return ResponseEntity.notFound().build(); // Devuelve 404 Not Found si no existe
         }
 
-        // 3. Si el producto existe, aplicar la lógica
+        // c. Si el producto existe, aplicar la lógica
         Producto producto = productoOptional.get();
         int nuevasExistencias = producto.getExistencias() + ajuste.cantidad;
 
-        // 4. Validar que el stock no sea negativo
+        // d. Validar que el stock no sea negativo
         if (nuevasExistencias < 0) {
             return ResponseEntity.badRequest().build(); // Devuelve 400 Bad Request
         }
 
-        // 5. Guardar y devolver el producto actualizado
+        // e. Guardar y devolver el producto actualizado
         producto.setExistencias(nuevasExistencias);
         Producto actualizado = productoService.save(producto);
 

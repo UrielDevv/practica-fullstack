@@ -2,10 +2,14 @@
   <nav class="sidebar">
     <h2>Menú Principal</h2>
     <ul>
-      <li><a routerLink="/dashboard/productos">Gestión de Productos</a></li>
+      <li><a routerLink="productos">Listar Productos</a></li>
+      
+      <li><a routerLink="productos/nuevo">Agregar Nuevo Producto</a></li>
+
       <li><a href="#" (click)="logout()">Cerrar Sesión</a></li>
     </ul>
   </nav>
+
   <main class="content">
     <router-outlet></router-outlet>
   </main>

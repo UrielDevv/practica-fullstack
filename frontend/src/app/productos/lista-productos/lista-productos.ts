@@ -38,7 +38,6 @@ export class ListaProductosComponent implements OnInit {
       )
       .subscribe({
         next: (data) => {
-          // En una app real, manejarías la paginación completa del objeto 'data'
           this.productos = data.content; 
         },
         error: (err) => {
