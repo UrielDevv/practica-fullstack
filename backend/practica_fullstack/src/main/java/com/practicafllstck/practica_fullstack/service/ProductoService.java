@@ -41,6 +41,11 @@ public class ProductoService {
         return productoRepository.save(producto);
     }
 
+    public boolean existsById(Long id) {
+        return productoRepository.findById(id).isPresent();
+    }
+
+
     // Método para eliminar un producto por su ID
     public void deleteById(Long id) {
         // Lógica de negocio: Validar que el producto existe antes de intentar borrarlo

@@ -1,6 +1,5 @@
 package com.practicafllstck.practica_fullstack.controller;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
 import com.practicafllstck.practica_fullstack.model.Producto;
 import com.practicafllstck.practica_fullstack.service.ProductoService;
 import jakarta.validation.Valid;
@@ -109,5 +108,15 @@ public class ProductoController {
         System.out.println("Ajustando inventario para producto " + id + ". Cantidad: " + ajuste.cantidad + ", Razón: " + ajuste.razon);
 
         return ResponseEntity.ok(actualizado); // Devuelve 200 OK con el producto
+    }
+    
+    // 7. DELETE /productos/{id} – Eliminar un producto
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> eliminarProducto(@PathVariable Long id) {
+        if (!productoService.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+        productoService.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 }
