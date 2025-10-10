@@ -46,4 +46,32 @@ export class ListaProductosComponent implements OnInit {
         }
       });
   }
-}
+
+  eliminarProducto(id: number): void {
+    if (confirm('¿Estás seguro de que deseas eliminar este producto?')) {
+      this.productoService.eliminarProducto(id).subscribe({
+        next: () => {
+          alert('Producto eliminado exitosamente.');
+          this.cargarProductos();
+        },
+        error: (err) => {
+          console.error(err);
+          alert('Error al eliminar el producto. Inténtalo de nuevo más tarde.');
+        }
+      });
+    }
+  }
+  toggleActivo(producto: Producto): void {
+    const nuevoEstado = !producto.activo;
+    this.productoService.activarDesactivar(producto.id, nuevoEstado).subscribe({
+      next: () => {
+        alert(`Producto ${nuevoEstado ? 'activado' : 'desactivado'} exitosamente.`);
+        this.cargarProductos();
+      },
+      error: (err) => {
+        console.error(err);
+        alert('Error al actualizar el estado del producto. Inténtalo de nuevo más tarde.');
+      }
+    });
+  }
+  }

@@ -39,11 +39,11 @@ export class FormularioProductoComponent implements OnInit {
     this.productoService.crearProducto(this.productoForm.value).subscribe(
       response => {
         console.log('Producto creado:', response);
-        // Aquí podrías redirigir al usuario o mostrar un mensaje de éxito
+        alert('Producto creado exitosamente.');
       },
       error => {
         console.error('Error al crear producto:', error);
-        // Aquí podrías mostrar un mensaje de error al usuario
+        alert('Error al crear el producto. Inténtalo de nuevo más tarde.');
       }
     );
   }

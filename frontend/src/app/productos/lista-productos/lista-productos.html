@@ -42,9 +42,10 @@
         <td>{{ producto.activo }}</td>
         <td>
           <a [routerLink]="['/dashboard/productos', producto.id, 'editar']">Actualizar</a>
-          <a [routerLink]="['/dashboard/productos', producto.id, 'ajuste-inventario']">Activar</a>
-          <a [routerLink]="['/dashboard/productos', producto.id, 'ajuste-inventario']">Desactivar</a>
-          <a [routerLink]="['/dashboard/productos', producto.id, 'ajuste-inventario']">Eliminar</a>
+          <button (click)="eliminarProducto(producto.id)" class="btn-accion btn-eliminar">Eliminar</button>
+          <button (click)="toggleActivo(producto)" class="btn-accion btn-activar">
+            {{ producto.activo ? 'Desactivar' : 'Activar' }}
+          </button>
         </td>
       </tr>
     </tbody>

@@ -74,4 +74,10 @@ export class ProductoService {
     const body = { cantidad, razon };
     return this.http.post<Producto>(url, body);
   }
+
+  //Eliminar producto por ID
+  eliminarProducto(id: number): Observable<void> {
+    const url = `${this.apiUrl}/${id}`;
+    return this.http.delete<void>(url);
+  }
 }
