@@ -7,7 +7,7 @@ import { Router, RouterModule } from '@angular/router';
   standalone: true,
   imports: [RouterModule],
   templateUrl: './dashboard.html',
-  // styleUrls: ['./dashboard.component.css'] // Opcional, para estilos
+  styleUrls: ['./dashboard.css'] // Opcional, para estilos
 })
 export class DashboardComponent {
   private platformId = inject(PLATFORM_ID);

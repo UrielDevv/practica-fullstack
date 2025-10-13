@@ -1,1 +1,83 @@
-/* You can add global styles to this file, and also import other style files */
+:root{
+  --primary: #0b74de;
+  --accent:  #ff6f61;
+  --bg:      #f6f8fb;
+  --card:    #ffffff;
+  --muted:   #6b7280;
+  --success: #16a34a;
+  --danger:  #ef4444;
+  --radius:  8px;
+  --gap:     12px;
+  --font:    "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+*{ box-sizing: border-box; }
+html,body{ margin:0; padding:0; font-family:var(--font); background:var(--bg); color:#0f172a; -webkit-font-smoothing:antialiased; }
+
+.dashboard-container { display:flex; min-height:100vh; gap:18px; }
+.sidebar {
+  width:220px;
+  background:var(--card);
+  padding:18px;
+  border-right:1px solid rgba(15,23,42,0.04);
+  box-shadow: 0 1px 3px rgba(2,6,23,0.04);
+}
+.sidebar h2{ margin:0 0 12px; font-size:1rem; color:var(--muted); }
+.sidebar ul{ list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:8px; }
+.sidebar a{ color:var(--primary); text-decoration:none; padding:8px 10px; border-radius:6px; display:inline-block; }
+.sidebar a:hover, .sidebar a:focus{ background: rgba(11,116,222,0.06); }
+
+.content{ flex:1; padding:24px; }
+
+.header-container h2{ margin:0 0 16px; font-size:1.25rem; color:#0b1220; }
+
+.add-product-button{
+  background:var(--primary); color:white; border:none; padding:8px 12px; border-radius:8px;
+  cursor:pointer; text-decoration:none; display:inline-block; margin-right:8px;
+}
+.add-product-button:hover{ transform:translateY(-1px); }
+
+form[formGroup]{
+  background:var(--card); padding:14px; border-radius:10px; box-shadow: 0 1px 4px rgba(2,6,23,0.04);
+  margin-bottom:16px;
+}
+
+/* Inputs inside forms (works even if inputs are in table cells) */
+form[formGroup] input[type="text"],
+form[formGroup] input[type="number"],
+form[formGroup] select,
+form[formGroup] textarea {
+  padding:8px 10px; border-radius:8px; border:1px solid #e6e9ee; min-width:140px;
+  font-size:14px; transition: box-shadow .12s, transform .08s;
+}
+form[formGroup] input:focus, form[formGroup] select:focus {
+  outline:none; box-shadow: 0 0 0 4px rgba(11,116,222,0.06);
+}
+
+/* Table styling */
+.products-table{ width:100%; border-collapse:collapse; margin-top:12px; font-size:14px; }
+.products-table thead th{
+  text-align:left; padding:10px 12px; color:var(--muted); font-weight:600;
+  border-bottom:1px solid #edf2f7;
+}
+.products-table td{ padding:10px 12px; vertical-align:middle; border-bottom:1px solid #f1f5f9; }
+.products-table tbody tr:hover{ background: rgba(11,116,222,0.03); }
+
+/* Badges (si más adelante normalizas la plantilla) */
+.badge{ display:inline-block; padding:4px 8px; border-radius:999px; font-size:12px; color:white; font-weight:600; }
+.badge-true{ background:var(--success); }
+.badge-false{ background:var(--danger); }
+
+.bulk-actions{ display:flex; gap:10px; margin:10px 0 6px 0; flex-wrap:wrap; }
+.bulk-actions button{ padding:8px 10px; border-radius:8px; border:none; cursor:pointer; }
+.bulk-actions button[disabled]{ opacity:0.55; cursor:not-allowed; }
+
+.btn-accion{ padding:6px 10px; border-radius:8px; border:none; cursor:pointer; font-size:13px; }
+.btn-eliminar{ background:var(--danger); color:white; }
+.btn-activar{ background:var(--accent); color:white; }
+
+form small{ display:block; margin-top:6px; font-size:12px; color:var(--danger); }
+
+
+button, a[role="button"]{ transition: transform .08s ease, opacity .08s ease; }
+button:active{ transform:translateY(0.5px); }

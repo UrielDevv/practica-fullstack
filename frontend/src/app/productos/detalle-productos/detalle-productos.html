@@ -1,36 +1,58 @@
-<form [formGroup]="detalleForm" (ngSubmit)="buscarproductodetalle()">
-    <table>
-        <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Marca</th>
-            <th>Precio</th>
-            <th>Existencias</th>
-            <th>Razón</th>
-            <th>Categoría</th>
-            <th>Activo</th>
-        </tr>
-        <tr>
-            <td><input type="text" id="id" formControlName="id"/>
-                <div *ngIf="f['id'].invalid && f['id'].touched" style="color: red;">
-                    <small *ngIf="f['id'].errors?.['required']">El ID es requerido.</small>
-                </div>
-            </td>
-            <td><input type="text" id="nombre" formControlName="nombre" /></td>
-            <td><input type="text" id="marca" formControlName="marca" /></td>
-            <td><input type="number" id="precio" formControlName="precio" /></td>
-            <td><input type="number" id="existencias" formControlName="existencias" /></td>
-            <td><input type="text" id="razon" formControlName="razon" /></td>
-            <td><input type="text" id="categoria" formControlName="categoria" /></td>
-            <td><select formControlName="subcategoria" id="subcategoria">
-                <option value="true">SI</option>
-                <option value="false">NO</option>
-            </select></td>
-        </tr>
-        <tr>
-            <td colspan="8">
-                <button type="submit">Buscar</button>
-            </td>
-        </tr>
-    </table>
+<head><h1>Filtros de Búsqueda</h1></head>
+<form [formGroup]="searchForm" (ngSubmit)="buscarProductos()">
+    <input type="text" formControlName="id" placeholder="ID...">
+    <input type="text" formControlName="nombre" placeholder="Nombre...">
+    <input type="text" formControlName="marca" placeholder="Marca...">
+    <input type="text" formControlName="categoria" placeholder="Categoría...">
+    <input type="number" formControlName="precio" placeholder="Precio...">
+    <input type="number" formControlName="existencias" placeholder="Existencias...">
+    <select formControlName="activo">
+      <option value="">-- Activo --</option>
+      <option value="true">Sí</option>
+      <option value="false">No</option>
+    </select>
+    <input type="text" formControlName="razon" placeholder="Razón...">
+  <button type="submit">Buscar</button>
 </form>
+
+<hr>
+
+<div class="bulk-actions" *ngIf="productosEncontrados.length > 0">
+  <button (click)="eliminarSeleccionados()" [disabled]="selectedProductIds.size === 0">
+    Eliminar Seleccionados ({{selectedProductIds.size}})
+  </button>
+  <button (click)="activarDesactivarSeleccionados(true)" [disabled]="selectedProductIds.size === 0">
+    Activar Seleccionados
+  </button>
+  <button (click)="activarDesactivarSeleccionados(false)" [disabled]="selectedProductIds.size === 0">
+    Desactivar Seleccionados
+  </button>
+</div>
+
+<table *ngIf="productosEncontrados.length > 0" class="products-table">
+  <thead>
+    <tr>
+      <th><input type="checkbox" (change)="toggleSelectAll($event)"></th>
+      <th>ID</th>
+      <th>Nombre</th>
+      <th>Marca</th>
+      <th>Activo</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let producto of productosEncontrados">
+      <td>
+        <input 
+          type="checkbox" 
+          [checked]="selectedProductIds.has(producto.id)"
+          (change)="toggleSelectProduct(producto.id, $event)">
+      </td>
+      <td>{{ producto.id }}</td>
+      <td>{{ producto.nombre }}</td>
+      <td>{{ producto.marca }}</td>
+      <td>{{ producto.activo ? 'Sí' : 'No' }}</td>
+    </tr>
+  </tbody>
+</table>
+
+<p *ngIf="productosEncontrados.length === 0">No se encontraron productos con esos filtros.</p>

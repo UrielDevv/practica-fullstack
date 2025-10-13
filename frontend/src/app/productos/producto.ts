@@ -27,7 +27,20 @@ export class ProductoService {
   /**
    * Obtiene una lista paginada de productos.
    */
-  getProductos(page: number, size: number): Observable<any> {
+  getProductos(filtros: any, page: number, size: number): Observable<any> {
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
+    Object.keys(filtros).forEach(key => {
+      const value = filtros[key];
+      if (value != null && value !== '') {
+        params = params.append(key, value);
+      }
+    });
+    return this.http.get<any>(this.apiUrl, { params });
+  }
+
+  getProducto(page: number, size: number): Observable<any> {
     const params = new HttpParams()
       .set('page', page.toString())
       .set('size', size.toString());
@@ -80,4 +93,19 @@ export class ProductoService {
     const url = `${this.apiUrl}/${id}`;
     return this.http.delete<void>(url);
   }
+
+  //Eliminar varios productos por IDs
+    eliminarProductos(ids: number[]): Observable<void> {
+        const url = `${this.apiUrl}/batch-delete`;
+        return this.http.post<void>(url, ids);
+    }
+
+    //Activar o desactivar varios productos por IDs
+    activarDesactivarProductos(ids: number[], activar: boolean): Observable<void> {
+        const url = `${this.apiUrl}/batch-activate`;
+        const params = new HttpParams().set('activar', activar);
+        return this.http.post<void>(url, ids, { params });
+    }
+
+
 }

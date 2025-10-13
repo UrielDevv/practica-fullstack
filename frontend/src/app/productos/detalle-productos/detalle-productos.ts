@@ -8,52 +8,74 @@ import { ProductoService, Producto } from '../producto';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './detalle-productos.html',
-  styleUrl: './detalle-productos.css'
+  styleUrls: ['./detalle-productos.css']
 })
 export class DetalleProductos {
-    public detalleForm: FormGroup;
-
-    public productos : Producto[] = [];
+    public searchForm: FormGroup;
+    public productosEncontrados: Producto[] = [];
+    public selectedProductIds = new Set<number>();
 
   constructor(private fb: FormBuilder, private productoService: ProductoService) { 
-    this.detalleForm = this.fb.group({
-      id: ['', Validators.required],
-      nombre: [{ value: '', disabled: true }],
-      marca: [{ value: '', disabled: true }],
-      precio: [{ value: '', disabled: true }],
-      existencias: [{ value: '', disabled: true }],
-      razon: [{ value: '', disabled: true }],
-      categoria: [{ value: '', disabled: true }],
-      activo: [{ value: '', disabled: true }]
+    this.searchForm = this.fb.group({
+      id: [''],
+      nombre: [''],
+      marca: [''],
+      precio: [''],
+      existencias: [''],
+      razon: [''],
+      categoria: [''],
+      activo: ['']
     });
   }
 
-  buscarproductodetalle() {
-    if (this.detalleForm.valid) {
-      const productoId = this.detalleForm.get('id')?.value;
-      this.productoService.getProductoById(productoId).subscribe(
-        productos => {
-          if (productos) {
-            this.detalleForm.patchValue({
-              id: productos.id,
-              nombre: productos.nombre,
-              marca: productos.marca,
-              precio: productos.precio,
-              existencias: productos.existencias,
-              razon: productos.razon,
-              categoria: productos.categoria,
-              activo: productos.activo
-            });
-          }
-        }
-      );
+  buscarProductos() {
+    const filtros = this.searchForm.value;
+    // Usamos el método de la lista, pero sin paginación para simplicidad
+    // En una app real, aquí también paginarías los resultados.
+    this.productoService.getProductos(filtros, 0, 100).subscribe(response => {
+      this.productosEncontrados = response.content;
+      this.selectedProductIds.clear(); // Limpia la selección anterior
+    });
+  }
 
-      console.log('Buscar producto con ID:', productoId);
+  // --- Lógica de Selección ---
+  toggleSelectAll(event: any) {
+    const checked = event.target.checked;
+    this.selectedProductIds.clear();
+    if (checked) {
+      this.productosEncontrados.forEach(p => this.selectedProductIds.add(p.id));
     }
   }
 
+  toggleSelectProduct(id: number, event: any) {
+    if (event.target.checked) {
+      this.selectedProductIds.add(id);
+    } else {
+      this.selectedProductIds.delete(id);
+    }
+  }
+
+  // --- Lógica de Acciones Masivas ---
+  eliminarSeleccionados() {
+    if (this.selectedProductIds.size === 0) return;
+    const ids = Array.from(this.selectedProductIds);
+    this.productoService.eliminarProductos(ids).subscribe(() => {
+      alert('Productos eliminados');
+      this.buscarProductos(); // Refresca la lista
+    });
+  }
+
+  activarDesactivarSeleccionados(activar: boolean) {
+    if (this.selectedProductIds.size === 0) return;
+    const ids = Array.from(this.selectedProductIds);
+    this.productoService.activarDesactivarProductos(ids, activar).subscribe(() => {
+      alert(`Productos ${activar ? 'activados' : 'desactivados'}`);
+      this.buscarProductos(); // Refresca la lista
+    });
+  }
+
   get f() {
-    return this.detalleForm.controls;
+    return this.searchForm.controls;
   }
 
 }

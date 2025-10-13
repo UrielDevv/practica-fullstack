@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
+import java.util.List;
 
 @RestController // Combina @Controller y @ResponseBody. Marca la clase como un controlador REST.
 @RequestMapping("/productos") // Mapea todas las peticiones que empiecen con /productos a este controlador.
@@ -22,8 +23,10 @@ public class ProductoController {
 
     // 1. GET /productos – Listar con paginación
     @GetMapping
-    public ResponseEntity<Page<Producto>> listarProductos(Pageable pageable) {
-        Page<Producto> productos = productoService.findAll(pageable);
+    public ResponseEntity<Page<Producto>> listarProductos(
+        Integer id, String nombre, String marca, Double precio, Integer existencias, String razon, Boolean activo,
+        String categoria, Pageable pageable) {
+        Page<Producto> productos = productoService.findAll(id,nombre, marca, precio, existencias, razon, activo, categoria, pageable);
         return ResponseEntity.ok(productos);
     }
 
@@ -117,6 +120,20 @@ public class ProductoController {
             return ResponseEntity.notFound().build();
         }
         productoService.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    //8 DELETE /productos – Eliminar varios productos por IDs
+    @DeleteMapping("/batch-delete")
+    public ResponseEntity<Void> eliminarVariosProductos(@RequestParam List<Long> ids) {
+        productoService.deleteAllByIds(ids);
+        return ResponseEntity.noContent().build();
+    }
+
+    // 9 Post /productos/activar – Activar o desactivar varios productos por IDs
+    @PostMapping("/batch-activar")
+    public ResponseEntity<Void> activarDesactivarVariosProductos(@RequestParam List<Long> ids, @RequestParam boolean activar) {
+        productoService.activarDesactivarProductos(ids, activar);
         return ResponseEntity.noContent().build();
     }
 }

@@ -9,7 +9,7 @@ import { RouterModule } from '@angular/router';
   standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './lista-productos.html',
-  //styleUrl: './lista-productos.css'
+  styleUrls: ['./lista-productos.css']
 })
 
 export class ListaProductosComponent implements OnInit {
@@ -20,7 +20,7 @@ export class ListaProductosComponent implements OnInit {
 
   // Paginación (ejemplo)
   private page = 0;
-  private size = 10;
+  private size = 5;
 
   constructor(private productoService: ProductoService) {}
 
@@ -32,7 +32,7 @@ export class ListaProductosComponent implements OnInit {
     this.isLoading = true;
     this.error = null;
 
-    this.productoService.getProductos(this.page, this.size)
+    this.productoService.getProducto(this.page, this.size)
       .pipe(
         finalize(() => this.isLoading = false) // Se ejecuta siempre, al final
       )

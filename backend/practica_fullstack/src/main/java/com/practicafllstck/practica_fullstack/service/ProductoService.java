@@ -7,8 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.transaction.Transactional;
 
-//import java.util.List;
+import java.util.List;
 import java.util.Optional;
 
 @Service // Anotación que marca esta clase como un componente de servicio de Spring
@@ -18,8 +21,38 @@ public class ProductoService {
     @Autowired
     private ProductoRepository productoRepository;
 
-    public Page<Producto> findAll(Pageable pageable) {
-        return productoRepository.findAll(pageable);
+    public Page<Producto> findAll(Integer id, String nombre, String marca, Double precio, Integer existencias, String razon, Boolean activo,
+    String categoria, Pageable pageable) {
+        Specification<Producto> spec = (root, query, criteriaBuilder) -> {
+            List<Predicate> predicates = new java.util.ArrayList<>();
+            if (id != null && id > 0) {
+                predicates.add(criteriaBuilder.equal(root.get("id"), id));
+            }
+
+            if (nombre != null && !nombre.isEmpty()) {
+                predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("nombre")), "%" + nombre.toLowerCase() + "%"));
+            }
+            if (marca != null && !marca.isEmpty()) {
+                predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("marca")), "%" + marca.toLowerCase() + "%"));
+            }
+            if (precio != null && precio > 0) {
+                predicates.add(criteriaBuilder.equal(root.get("precio"), precio));
+            }
+            if (existencias != null && existencias >= 0) {
+                predicates.add(criteriaBuilder.equal(root.get("existencias"), existencias));
+            }
+            if (razon != null && !razon.isEmpty()) {
+                predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("razon")), "%" + razon.toLowerCase() + "%"));
+            }
+            if (activo != null) {
+                predicates.add(criteriaBuilder.isTrue(root.get("activo")));
+            }
+            if (categoria != null && !categoria.isEmpty()) {
+                predicates.add(criteriaBuilder.equal(root.get("categoria"), categoria));
+            }
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+        };
+        return productoRepository.findAll(spec, pageable);
     }
 
     // Método para obtener un producto por su ID
@@ -54,4 +87,26 @@ public class ProductoService {
         }
         productoRepository.deleteById(id);
     }
+
+    //MEtodo de eliminar varios productos por sus IDs
+    @Transactional //Transaccional porque es una operacion a la bd como una transaccion tradicional
+    public void deleteAllByIds(List<Long> ids) {
+        productoRepository.deleteAllByIdInBatch(ids);
+    }
+
+    //metodo para activar o desactivar varios productos por sus IDs
+    @Transactional
+    public void activarDesactivarProductos(List<Long> ids, boolean activar) {
+        List<Producto> productos = productoRepository.findAllById(ids);
+        for (Producto producto : productos) {
+            producto.setActivo(activar);
+        }
+        productoRepository.saveAll(productos);
+    }
+
+    /*Metodo para actualizar existencias de varios productos por sus IDs
+    @Transactional
+    public Producto actualizarExistencias(Long id, int cantidad, String razon) {
+    }
+    */
 }

@@ -9,7 +9,7 @@ import { ProductoService, Producto } from '../producto';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './formulario.html',
-  styleUrl: './formulario.css'
+  styleUrls: ['./formulario.css']
 })
 
 export class FormularioProductoComponent implements OnInit {
@@ -47,25 +47,24 @@ export class FormularioProductoComponent implements OnInit {
       }
     );
   }
-
+/*
   editarProducto(): void {
     if (this.productoForm.invalid) {
-      this.productoForm.markAllAsTouched(); // Marca todos los campos como "tocados" para mostrar errores
+      this.productoForm.markAllAsTouched();
       return;
     }
-/*
+
     this.productoService.editarProducto(this.productoForm.value).subscribe(
       response => {
         console.log('Producto editado:', response);
-        // Aquí podrías redirigir al usuario o mostrar un mensaje de éxito
+        alert('Producto editado exitosamente.');
       },
       error => {
         console.error('Error al editar producto:', error);
-        // Aquí podrías mostrar un mensaje de error al usuario
+        alert('Error al editar el producto. Inténtalo de nuevo más tarde.');
       }
     );
-*/
-    }
+  }*/
 
   get f() {
     return this.productoForm.controls;
