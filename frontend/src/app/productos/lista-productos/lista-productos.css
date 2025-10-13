@@ -1,33 +1,60 @@
-.paginacion {
+.top-actions {
   display: flex;
-  justify-content: center;
+  gap: 15px;
   align-items: center;
-  gap: 1rem;
-  margin-top: 20px;
+  flex-wrap: wrap;
 }
 
-.paginacion button {
-  padding: 6px 12px;
-  background-color: #1976d2;
-  color: white;
+.bulk-actions {
+  margin-left: auto; /* Empuja los botones masivos a la derecha */
+  display: flex;
+  gap: 10px;
+}
+
+/* --- Estilos para el Formulario Desplegable --- */
+.collapsible-form {
+  /* Oculto por defecto */
+  max-height: 0;
+  overflow: hidden;
+  padding-top: 0;
+  padding-bottom: 0;
+  margin-top: 0;
+  margin-bottom: 0;
   border: none;
-  border-radius: 4px;
-  cursor: pointer;
+  transition: all 0.4s ease-in-out;
 }
-
-.paginacion button:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
-
-.spinner {
-  text-align: center;
+.collapsible-form.show {
+  /* Se muestra con una animación */
+  max-height: 500px; /* Un valor suficientemente alto */
   margin-top: 20px;
-  font-weight: 500;
+  margin-bottom: 30px;
+  padding-top: 25px;
+  padding-bottom: 25px;
+  border: 1px solid var(--border-color);
 }
 
-.mensaje-error {
-  text-align: center;
-  color: #d32f2f;
-  margin-top: 15px;
+.inline-form {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+.inline-form .form-control {
+  min-width: 150px;
+}
+.inline-form button {
+  margin-left: auto;
+}
+
+/* --- Estilos para la Tabla y Paginación --- */
+.actions-cell {
+  display: flex;
+  gap: 10px;
+}
+
+.pagination-controls {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 15px;
+  margin-top: 20px;
 }

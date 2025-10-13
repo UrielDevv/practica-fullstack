@@ -1,63 +1,82 @@
-<div class="header-container">
-  <h2>Gestión de Productos</h2>
+<div class="top-actions card">
+  <button class="btn btn-primary" (click)="toggleFormularioAgregar()">
+    {{ mostrarFormularioAgregar ? 'Ocultar Formulario' : 'Agregar Producto' }}
+  </button>
+  <button class="btn" (click)="toggleFormularioFiltros()">
+    {{ mostrarFormularioFiltros ? 'Ocultar Filtros' : 'Mostrar Filtros' }}
+  </button>
+  
+  <div *ngIf="filtroActivo" class="bulk-actions">
+    <button class="btn btn-danger" (click)="eliminarSeleccionados()" [disabled]="selectedProductIds.size === 0">
+      Eliminar Seleccionados ({{selectedProductIds.size}})
+    </button>
+    </div>
 </div>
 
-<div *ngIf="isLoading" style="text-align: center; padding: 50px;">
-  <p>Cargando productos...</p>
+<div class="collapsible-form card" [class.show]="mostrarFormularioAgregar">
+  <h3>Agregar Nuevo Producto</h3>
+  <form [formGroup]="agregarForm" (ngSubmit)="guardarProducto()" class="inline-form">
+    <input class="form-control" formControlName="nombre" placeholder="Nombre...">
+    <input class="form-control" formControlName="marca" placeholder="Marca...">
+    <input class="form-control" formControlName="categoria" placeholder="Categoría...">
+    <input type="number" class="form-control" formControlName="precio" placeholder="Precio...">
+    <input type="number" class="form-control" formControlName="existencias" placeholder="Existencias...">
+    <select class="form-control" formControlName="activo">
+      <option [value]="true">Sí</option>
+      <option [value]="false">No</option>
+    </select>
+    <button type="submit" class="btn btn-primary" [disabled]="agregarForm.invalid">Guardar</button>
+  </form>
 </div>
 
-<div *ngIf="!isLoading && error" style="color: red; text-align: center; padding: 50px;">
-  <h3>Error al Cargar</h3>
-  <p>{{ error }}</p>
+<div class="collapsible-form card" [class.show]="mostrarFormularioFiltros">
+  <h3>Filtrar Productos</h3>
+  <form [formGroup]="filtroForm" (ngSubmit)="aplicarFiltros()" class="inline-form">
+    <input class="form-control" formControlName="nombre" placeholder="Nombre...">
+    <input class="form-control" formControlName="marca" placeholder="Marca...">
+    <input class="form-control" formControlName="categoria" placeholder="Categoría...">
+    <button type="submit" class="btn btn-primary">Filtrar</button>
+    <button type="button" class="btn" (click)="limpiarFiltros()" >Resetear</button>
+  </form>
 </div>
 
-<div>
-  <button routerLink="/dashboard/productos/crearProducto" class="add-product-button">Agregar Producto</button>
-  <button routerLink="/dashboard/productos/id" class="add-product-button">Buscar</button>
-  <button routerLink="/dashboard/productos/actualizar-productos" class="add-product-button">Actualizar Productos</button>
-</div>
-
-<div *ngIf="!isLoading && !error">
-  <table class="products-table" *ngIf="productos.length > 0">
+<div class="card">
+  <table class="table">
     <thead>
       <tr>
+        <th *ngIf="filtroActivo"><input type="checkbox" (change)="toggleSelectAll($event)"></th>
         <th>ID</th>
         <th>Nombre</th>
         <th>Marca</th>
         <th>Precio</th>
         <th>Existencias</th>
-        <th>Razon</th>
         <th>Activo</th>
         <th>Acciones</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let producto of productos">
+        <td *ngIf="filtroActivo">
+          <input type="checkbox" [checked]="selectedProductIds.has(producto.id)" (change)="toggleSelectProduct(producto.id, $event)">
+        </td>
         <td>{{ producto.id }}</td>
         <td>{{ producto.nombre }}</td>
         <td>{{ producto.marca }}</td>
         <td>{{ producto.precio | currency }}</td>
         <td>{{ producto.existencias }}</td>
-        <td>{{ producto.razon }}</td>
-        <td>{{ producto.activo }}</td>
-        <td>
-          <a [routerLink]="['/dashboard/productos', producto.id, 'editar']">Actualizar</a>
-          <button (click)="eliminarProducto(producto.id)" class="btn-accion btn-eliminar">Eliminar</button>
-          <button (click)="toggleActivo(producto)" class="btn-accion btn-activar">
-            {{ producto.activo ? 'Desactivar' : 'Activar' }}
-          </button>
+        <td>{{ producto.activo ? 'Sí' : 'No' }}</td>
+        <td class="actions-cell">
+          <!--<button (click)="iniciarEdicion(producto)" class="btn">Editar</button>-->
+          <button (click)="eliminarProducto(producto.id)" class="btn btn-danger">Eliminar</button>
+          <button (click)="toggleActivo(producto)" class="btn">{{ producto.activo ? 'Desactivar' : 'Activar' }}</button>
         </td>
       </tr>
     </tbody>
   </table>
 
-  <div class="paginacion">
-  <button (click)="paginaAnterior()" [disabled]="page === 0">Anterior</button>
-  <span>Página {{ page + 1 }} de {{ totalPaginas }}</span>
-  <button (click)="paginaSiguiente()" [disabled]="page === totalPaginas - 1">Siguiente</button>
-</div>
-
-  <div *ngIf="productos.length === 0" style="text-align: center; padding: 50px;">
-    <p>No se encontraron productos para mostrar.</p>
+  <div class="pagination-controls" *ngIf="productos.length > 0">
+    <button class="btn" (click)="paginaAnterior()" [disabled]="currentPage === 0">Anterior</button>
+    <span>Página {{ currentPage + 1 }} de {{ totalPages }}</span>
+    <button class="btn" (click)="paginaSiguiente()" [disabled]="currentPage >= totalPages - 1">Siguiente</button>
   </div>
 </div>

@@ -1,13 +1,14 @@
 <div class="dashboard-container">
   <nav class="sidebar">
-    <h2>Menú Principal</h2>
+    <div class="sidebar-header">
+      <h2>Devvv</h2>
+    </div>
     <ul>
-      <li><a routerLink="productos">Listar Productos</a></li>
-      <li><a routerLink="productos/crearProducto">Agregar Nuevo Producto</a></li>
-      <li><a routerLink="productos/:id">Buscar Producto</a></li>
-      <li><a routerLink="productos/actualizar-productos">Actualizar Producto</a></li>
-      <li><a href="#" (click)="logout()">Cerrar Sesión</a></li>
-    </ul>
+      <li><a routerLink="." routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Gestión de Productos</a></li>
+      </ul>
+    <div class="sidebar-footer">
+      <a href="#" (click)="logout()">Cerrar Sesión</a>
+    </div>
   </nav>
 
   <main class="content">
