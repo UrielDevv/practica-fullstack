@@ -30,8 +30,6 @@ export class DetalleProductos {
 
   buscarProductos() {
     const filtros = this.searchForm.value;
-    // Usamos el método de la lista, pero sin paginación para simplicidad
-    // En una app real, aquí también paginarías los resultados.
     this.productoService.getProductos(filtros, 0, 100).subscribe(response => {
       this.productosEncontrados = response.content;
       this.selectedProductIds.clear(); // Limpia la selección anterior

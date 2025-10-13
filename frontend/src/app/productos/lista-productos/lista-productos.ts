@@ -18,9 +18,9 @@ export class ListaProductosComponent implements OnInit {
   public isLoading = true; // Inicia en true para mostrar el spinner al cargar
   public error: string | null = null;
 
-  // Paginación (ejemplo)
-  private page = 0;
-  private size = 5;
+  public page = 0;
+  public size = 3;
+  public totalPaginas = 0;
 
   constructor(private productoService: ProductoService) {}
 
@@ -38,13 +38,28 @@ export class ListaProductosComponent implements OnInit {
       )
       .subscribe({
         next: (data) => {
-          this.productos = data.content; 
+          this.productos = data.content;
+          this.totalPaginas = data.totalPages;
         },
         error: (err) => {
           this.error = 'No se pudieron cargar los productos. Inténtalo de nuevo más tarde.';
           console.error(err);
         }
       });
+  }
+
+  paginaAnterior(): void {
+    if (this.page > 0) {
+      this.page--;
+      this.cargarProductos();
+    }
+  }
+
+  paginaSiguiente(): void {
+    if (this.page < this.totalPaginas - 1) {
+      this.page++;
+      this.cargarProductos();
+    }
   }
 
   eliminarProducto(id: number): void {

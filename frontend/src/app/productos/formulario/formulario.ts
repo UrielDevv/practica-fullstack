@@ -24,7 +24,7 @@ export class FormularioProductoComponent implements OnInit {
       precio: [null, [Validators.required, Validators.min(0.01)]],
       existencias: [null, [Validators.required, Validators.min(0)]],
       activo: ['', Validators.required],
-      razon: ['']
+      razon: ['', Validators.minLength(5)]
     });
   }
 
