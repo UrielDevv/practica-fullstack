@@ -1,32 +1,28 @@
 <div class="top-actions card">
-  <button class="btn btn-primary" (click)="toggleFormularioAgregar()">
-    {{ mostrarFormularioAgregar ? 'Ocultar Formulario' : 'Agregar Producto' }}
-  </button>
-  <button class="btn" (click)="toggleFormularioFiltros()">
-    {{ mostrarFormularioFiltros ? 'Ocultar Filtros' : 'Mostrar Filtros' }}
-  </button>
+  <button class="btn btn-primary" (click)="toggleFormularioAgregar()">{{ mostrarFormularioAgregar ? 'Ocultar' : 'Agregar Producto' }}</button>
+  <button class="btn" (click)="toggleFormularioFiltros()">{{ mostrarFormularioFiltros ? 'Ocultar' : 'Mostrar Filtros' }}</button>
   
   <div *ngIf="filtroActivo" class="bulk-actions">
-    <button class="btn btn-danger" (click)="eliminarSeleccionados()" [disabled]="selectedProductIds.size === 0">
-      Eliminar Seleccionados ({{selectedProductIds.size}})
-    </button>
-    </div>
+   <!-- <button class="btn" (click)="activarDesactivarSeleccionados(true)" [disabled]="selectedProductIds.size === 0">Activar</button>
+    <button class="btn" (click)="activarDesactivarSeleccionados(false)" [disabled]="selectedProductIds.size === 0">Desactivar</button>
+  --><button class="btn btn-danger" (click)="eliminarSeleccionados()" [disabled]="selectedProductIds.size === 0">Eliminar ({{selectedProductIds.size}})</button>
+  </div>
 </div>
 
 <div class="collapsible-form card" [class.show]="mostrarFormularioAgregar">
-  <h3>Agregar Nuevo Producto</h3>
-  <form [formGroup]="agregarForm" (ngSubmit)="guardarProducto()" class="inline-form">
-    <input class="form-control" formControlName="nombre" placeholder="Nombre...">
-    <input class="form-control" formControlName="marca" placeholder="Marca...">
-    <input class="form-control" formControlName="categoria" placeholder="Categoría...">
-    <input type="number" class="form-control" formControlName="precio" placeholder="Precio...">
-    <input type="number" class="form-control" formControlName="existencias" placeholder="Existencias...">
-    <select class="form-control" formControlName="activo">
-      <option [value]="true">Sí</option>
-      <option [value]="false">No</option>
-    </select>
-    <button type="submit" class="btn btn-primary" [disabled]="agregarForm.invalid">Guardar</button>
-  </form>
+    <h3>Agregar Nuevo Producto</h3>
+    <form [formGroup]="agregarForm" (ngSubmit)="guardarProducto()" class="inline-form">
+        <input class="form-control" formControlName="nombre" placeholder="Nombre...">
+        <input class="form-control" formControlName="marca" placeholder="Marca...">
+        <input class="form-control" formControlName="categoria" placeholder="Categoría...">
+        <input type="number" class="form-control" formControlName="precio" placeholder="Precio...">
+        <input type="number" class="form-control" formControlName="existencias" placeholder="Existencias...">
+        <select class="form-control" formControlName="activo">
+            <option [value]="true">Sí</option>
+            <option [value]="false">No</option>
+        </select>
+        <button type="submit" class="btn btn-primary" [disabled]="agregarForm.invalid">Guardar</button>
+    </form>
 </div>
 
 <div class="collapsible-form card" [class.show]="mostrarFormularioFiltros">
@@ -36,7 +32,7 @@
     <input class="form-control" formControlName="marca" placeholder="Marca...">
     <input class="form-control" formControlName="categoria" placeholder="Categoría...">
     <button type="submit" class="btn btn-primary">Filtrar</button>
-    <button type="button" class="btn" (click)="limpiarFiltros()" >Resetear</button>
+    <button type="button" (click)="limpiarFiltros()" class="btn">Limpiar</button>
   </form>
 </div>
 
@@ -44,8 +40,7 @@
   <table class="table">
     <thead>
       <tr>
-        <th *ngIf="filtroActivo"><input type="checkbox" (change)="toggleSelectAll($event)"></th>
-        <th>ID</th>
+        <th *ngIf="filtroActivo"><input type="checkbox" (change)="toggleSelectAll($event)" [checked]="isAllSelected"></th>
         <th>Nombre</th>
         <th>Marca</th>
         <th>Precio</th>
@@ -55,22 +50,35 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let producto of productos">
-        <td *ngIf="filtroActivo">
-          <input type="checkbox" [checked]="selectedProductIds.has(producto.id)" (change)="toggleSelectProduct(producto.id, $event)">
-        </td>
-        <td>{{ producto.id }}</td>
-        <td>{{ producto.nombre }}</td>
-        <td>{{ producto.marca }}</td>
-        <td>{{ producto.precio | currency }}</td>
-        <td>{{ producto.existencias }}</td>
-        <td>{{ producto.activo ? 'Sí' : 'No' }}</td>
-        <td class="actions-cell">
-          <!--<button (click)="iniciarEdicion(producto)" class="btn">Editar</button>-->
-          <button (click)="eliminarProducto(producto.id)" class="btn btn-danger">Eliminar</button>
-          <button (click)="toggleActivo(producto)" class="btn">{{ producto.activo ? 'Desactivar' : 'Activar' }}</button>
-        </td>
-      </tr>
+      <ng-container *ngFor="let producto of productos">
+        <tr *ngIf="editingId !== producto.id">
+          <td *ngIf="filtroActivo">
+            <input type="checkbox" [checked]="selectedProductIds.has(producto.id)" (change)="toggleSelectProduct(producto.id, $event)">
+          </td>
+          <td>{{ producto.nombre }}</td>
+          <td>{{ producto.marca }}</td>
+          <td>{{ producto.precio | currency }}</td>
+          <td>{{ producto.existencias }}</td>
+          <td>{{ producto.activo ? 'Sí' : 'No' }}</td>
+          <td class="actions-cell">
+            <button (click)="iniciarEdicion(producto)" class="btn">Editar</button>
+            <button (click)="eliminarProducto(producto.id)" class="btn btn-danger">Eliminar</button>
+            <button (click)="toggleActivo(producto)" class="btn">{{ producto.activo ? 'Desactivar' : 'Activar' }}</button>
+          </td>
+        </tr>
+        <tr *ngIf="editingId === producto.id">
+          <td [attr.colspan]="filtroActivo ? 7 : 6" class="edit-row">
+            <form [formGroup]="editForm" (ngSubmit)="guardarEdicion(producto)" class="inline-form">
+              <input formControlName="nombre" class="form-control">
+              <input formControlName="marca" class="form-control">
+              <input type="number" formControlName="precio" class="form-control">
+              <input type="number" formControlName="existencias" class="form-control">
+              <button type="submit" class="btn btn-primary" [disabled]="editForm.invalid">Guardar</button>
+              <button type="button" (click)="cancelarEdicion()" class="btn">Cancelar</button>
+            </form>
+          </td>
+        </tr>
+      </ng-container>
     </tbody>
   </table>
 
@@ -78,5 +86,5 @@
     <button class="btn" (click)="paginaAnterior()" [disabled]="currentPage === 0">Anterior</button>
     <span>Página {{ currentPage + 1 }} de {{ totalPages }}</span>
     <button class="btn" (click)="paginaSiguiente()" [disabled]="currentPage >= totalPages - 1">Siguiente</button>
-  </div>
+    </div>
 </div>
