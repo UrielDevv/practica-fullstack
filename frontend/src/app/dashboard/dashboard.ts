@@ -10,9 +10,9 @@ import { Router, RouterModule } from '@angular/router';
   styleUrls: ['./dashboard.css']
 })
 export class DashboardComponent {
-  private platformId = inject(PLATFORM_ID);
+  private readonly platformId = inject(PLATFORM_ID);
 
-  constructor(private router: Router) {}
+  constructor(private readonly router: Router) {}
 
   logout(): void {
     if (isPlatformBrowser(this.platformId)) {

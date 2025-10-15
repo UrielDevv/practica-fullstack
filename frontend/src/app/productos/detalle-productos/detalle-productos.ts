@@ -15,7 +15,7 @@ export class DetalleProductos {
     public productosEncontrados: Producto[] = [];
     public selectedProductIds = new Set<number>();
 
-  constructor(private fb: FormBuilder, private productoService: ProductoService) { 
+  constructor(private readonly fb: FormBuilder, private readonly productoService: ProductoService) { 
     this.searchForm = this.fb.group({
       id: [''],
       nombre: [''],

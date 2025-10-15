@@ -19,7 +19,7 @@ export class LoginComponent {
   errorMessage: string | null = null; // Propiedad para el mensaje de error
   platformId = inject(PLATFORM_ID);
 
-  constructor(private router: Router) {}
+  constructor(private readonly router: Router) {}
 
   onLogin(): void {
     if (this.email === 'test@correo.com' && this.password === '123456') {

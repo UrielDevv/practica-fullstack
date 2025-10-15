@@ -34,8 +34,8 @@ export class ListaProductosComponent implements OnInit {
   selectedProductIds = new Set<number>();
 
   constructor(
-    private productoService: ProductoService,
-    private fb: FormBuilder,
+    private readonly productoService: ProductoService,
+    private readonly fb: FormBuilder,
   ) {
     this.filtroForm = this.fb.group({ nombre: [''], marca: [''], categoria: [''] });
     this.agregarForm = this.fb.group({

@@ -15,7 +15,7 @@ import { ProductoService, Producto } from '../producto';
 export class FormularioProductoComponent {
   public productoForm: FormGroup;
 
-  constructor(private fb: FormBuilder, private productoService: ProductoService) {
+  constructor(private readonly fb: FormBuilder, private readonly productoService: ProductoService) {
     // Definimos la estructura y las reglas del formulario
     this.productoForm = this.fb.group({
       nombre: ['', [Validators.required, Validators.minLength(3)]],
@@ -44,24 +44,6 @@ export class FormularioProductoComponent {
       }
     );
   }
-/*
-  editarProducto(): void {
-    if (this.productoForm.invalid) {
-      this.productoForm.markAllAsTouched();
-      return;
-    }
-
-    this.productoService.editarProducto(this.productoForm.value).subscribe(
-      response => {
-        console.log('Producto editado:', response);
-        alert('Producto editado exitosamente.');
-      },
-      error => {
-        console.error('Error al editar producto:', error);
-        alert('Error al editar el producto. Inténtalo de nuevo más tarde.');
-      }
-    );
-  }*/
 
   get f() {
     return this.productoForm.controls;

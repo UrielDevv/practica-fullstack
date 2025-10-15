@@ -3,9 +3,7 @@
   <button class="btn" (click)="toggleFormularioFiltros()">{{ mostrarFormularioFiltros ? 'Ocultar' : 'Mostrar Filtros' }}</button>
   
   <div *ngIf="filtroActivo" class="bulk-actions">
-   <!-- <button class="btn" (click)="activarDesactivarSeleccionados(true)" [disabled]="selectedProductIds.size === 0">Activar</button>
-    <button class="btn" (click)="activarDesactivarSeleccionados(false)" [disabled]="selectedProductIds.size === 0">Desactivar</button>
-  --><button class="btn btn-danger" (click)="eliminarSeleccionados()" [disabled]="selectedProductIds.size === 0">Eliminar ({{selectedProductIds.size}})</button>
+  <button class="btn btn-danger" (click)="eliminarSeleccionados()" [disabled]="selectedProductIds.size === 0">Eliminar ({{selectedProductIds.size}})</button>
   </div>
 </div>
 

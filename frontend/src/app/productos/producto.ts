@@ -19,10 +19,10 @@ export interface Producto {
 })
 export class ProductoService {
   // La URL base de tu API de Spring Boot
-  private apiUrl = 'http://localhost:8080/productos';
+  private readonly apiUrl = 'http://localhost:8080/productos';
 
   // Inyectamos HttpClient para poder hacer las peticiones HTTP
-  constructor(private http: HttpClient) { }
+  constructor(private readonly http: HttpClient) { }
 
   /**
    * Obtiene una lista paginada de productos.
