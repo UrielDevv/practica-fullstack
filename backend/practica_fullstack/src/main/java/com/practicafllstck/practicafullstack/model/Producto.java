@@ -1,4 +1,4 @@
-package com.practicafllstck.practica_fullstack.model;
+package com.practicafllstck.practicafullstack.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;

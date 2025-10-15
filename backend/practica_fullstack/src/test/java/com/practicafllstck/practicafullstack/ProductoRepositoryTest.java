@@ -1,7 +1,7 @@
-package com.practicafllstck.practica_fullstack; // Asegúrate que el paquete coincida con el tuyo
+package com.practicafllstck.practicafullstack; // Asegúrate que el paquete coincida con el tuyo
 
-import com.practicafllstck.practica_fullstack.model.Producto;
-import com.practicafllstck.practica_fullstack.repository.ProductoRepository;
+import com.practicafllstck.practicafullstack.model.Producto;
+import com.practicafllstck.practicafullstack.repository.ProductoRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;

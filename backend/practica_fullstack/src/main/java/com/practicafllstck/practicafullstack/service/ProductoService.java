@@ -1,14 +1,13 @@
-package com.practicafllstck.practica_fullstack.service;
+package com.practicafllstck.practicafullstack.service;
 
 
-import com.practicafllstck.practica_fullstack.model.Producto;
-import com.practicafllstck.practica_fullstack.repository.ProductoRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.practicafllstck.practicafullstack.model.Producto;
+import com.practicafllstck.practicafullstack.repository.ProductoRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
-import jakarta.persistence.criteria.Predicate;
+import static com.practicafllstck.practicafullstack.repository.specifications.ProductoSpecifications.*;
 import jakarta.transaction.Transactional;
 
 import java.util.List;
@@ -18,43 +17,23 @@ import java.util.Optional;
 public class ProductoService {
 
     // Inyección de dependencias: Spring nos proporciona una instancia de ProductoRepository
-    @Autowired
     private ProductoRepository productoRepository;
 
-    public Page<Producto> findAll(Integer id, String nombre, String marca, Double precio, Integer existencias, String razon, Boolean activo,
-    String categoria, Pageable pageable) {
-        Specification<Producto> spec = (root, query, criteriaBuilder) -> {
-            List<Predicate> predicates = new java.util.ArrayList<>();
-            if (id != null && id > 0) {
-                predicates.add(criteriaBuilder.equal(root.get("id"), id));
-            }
-
-            if (nombre != null && !nombre.isEmpty()) {
-                predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("nombre")), "%" + nombre.toLowerCase() + "%"));
-            }
-            if (marca != null && !marca.isEmpty()) {
-                predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("marca")), "%" + marca.toLowerCase() + "%"));
-            }
-            if (precio != null && precio > 0) {
-                predicates.add(criteriaBuilder.equal(root.get("precio"), precio));
-            }
-            if (existencias != null && existencias >= 0) {
-                predicates.add(criteriaBuilder.equal(root.get("existencias"), existencias));
-            }
-            if (razon != null && !razon.isEmpty()) {
-                predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("razon")), "%" + razon.toLowerCase() + "%"));
-            }
-            if (activo != null) {
-                predicates.add(criteriaBuilder.isTrue(root.get("activo")));
-            }
-            if (categoria != null && !categoria.isEmpty()) {
-                predicates.add(criteriaBuilder.equal(root.get("categoria"), categoria));
-            }
-            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
-        };
+    public Page<Producto> findAll(Integer id, String nombre, String marca,
+                                  Double precio, Integer existencias,
+                                  String razon, Boolean activo,
+                                  String categoria, Pageable pageable) {
+        Specification<Producto> spec = Specification.unrestricted();
+                spec = spec.and(conId(id))
+                .and(conNombre(nombre))
+                .and(conMarca(marca))
+                .and(conPrecio(precio))
+                .and(conExistencias(existencias))
+                .and(conRazon(razon))
+                .and(estaActivo(activo))
+                .and(conCategoria(categoria));
         return productoRepository.findAll(spec, pageable);
     }
-
     // Método para obtener un producto por su ID
     public Optional<Producto> findById(Long id) {
         return productoRepository.findById(id);
@@ -103,10 +82,4 @@ public class ProductoService {
         }
         productoRepository.saveAll(productos);
     }
-
-    /*Metodo para actualizar existencias de varios productos por sus IDs
-    @Transactional
-    public Producto actualizarExistencias(Long id, int cantidad, String razon) {
-    }
-    */
 }

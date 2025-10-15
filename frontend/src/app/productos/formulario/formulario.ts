@@ -12,7 +12,7 @@ import { ProductoService, Producto } from '../producto';
   styleUrls: ['./formulario.css']
 })
 
-export class FormularioProductoComponent implements OnInit {
+export class FormularioProductoComponent {
   public productoForm: FormGroup;
 
   constructor(private fb: FormBuilder, private productoService: ProductoService) {
@@ -26,9 +26,6 @@ export class FormularioProductoComponent implements OnInit {
       activo: ['', Validators.required],
       razon: ['', Validators.minLength(5)]
     });
-  }
-
-  ngOnInit(): void {
   }
 
   guardarProducto(): void {

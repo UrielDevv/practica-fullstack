@@ -1,6 +1,6 @@
-package com.practicafllstck.practica_fullstack.repository;
+package com.practicafllstck.practicafullstack.repository;
 
-import com.practicafllstck.practica_fullstack.model.Producto;
+import com.practicafllstck.practicafullstack.model.Producto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;

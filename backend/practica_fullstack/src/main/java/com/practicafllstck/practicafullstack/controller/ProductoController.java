@@ -1,32 +1,51 @@
-package com.practicafllstck.practica_fullstack.controller;
+package com.practicafllstck.practicafullstack.controller;
 
-import com.practicafllstck.practica_fullstack.model.Producto;
-import com.practicafllstck.practica_fullstack.service.ProductoService;
+import com.practicafllstck.practicafullstack.model.Producto;
+import com.practicafllstck.practicafullstack.service.ProductoService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.List;
+import java.util.Optional;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import java.util.Optional;
-import java.util.List;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-@RestController // Combina @Controller y @ResponseBody. Marca la clase como un controlador REST.
-@RequestMapping("/productos") // Mapea todas las peticiones que empiecen con /productos a este controlador.
-@CrossOrigin(origins = "http://localhost:4200") // Permite solicitudes CORS desde el frontend
+/**
+ * Controlador REST para gestionar operaciones CRUD sobre productos.
+ * Expone endpoints para listar, crear y manipular productos.
+ */
+@RestController
+// Mapea todas las peticiones que empiecen con /productos a este controlador.
+@RequestMapping("/productos")
+// Permite solicitudes CORS desde el frontend
+@CrossOrigin(origins = "http://localhost:4200")
 
 public class ProductoController {
+    private static final Logger log = LogManager.getLogger(ProductoController.class);
+  private ProductoService productoService;
 
-    @Autowired
-    private ProductoService productoService;
-
-    // 1. GET /productos – Listar con paginación
-    @GetMapping
+  //1. GET /productos – Listar con paginación como:
+  
+  @GetMapping
     public ResponseEntity<Page<Producto>> listarProductos(
-        Integer id, String nombre, String marca, Double precio, Integer existencias, String razon, Boolean activo,
-        String categoria, Pageable pageable) {
-        Page<Producto> productos = productoService.findAll(id,nombre, marca, precio, existencias, razon, activo, categoria, pageable);
+            Integer id, String nombre, String marca, Double precio, Integer existencias, String razon, Boolean activo,
+            String categoria, Pageable pageable) {
+        Page<Producto> productos = productoService.findAll(id, nombre, marca, precio, existencias, razon, activo,
+                categoria, pageable);
         return ResponseEntity.ok(productos);
     }
 
@@ -47,7 +66,8 @@ public class ProductoController {
 
     // 4. PUT /productos/{id} – Actualizar un producto completo
     @PutMapping("/{id}")
-    public ResponseEntity<Producto> actualizarProducto(@PathVariable Long id, @Valid @RequestBody Producto productoDetalles) {
+    public ResponseEntity<Producto> actualizarProducto(@PathVariable Long id,
+            @Valid @RequestBody Producto productoDetalles) {
         return productoService.findById(id)
                 .map(productoExistente -> {
                     productoExistente.setNombre(productoDetalles.getNombre());
@@ -74,14 +94,13 @@ public class ProductoController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-
     public static class AjusteRequest {
-        public int cantidad;
-        public String razon;
+      int cantidad;
+      String razon;
     }
 
     // 6. POST /productos/{id}/ajustar – Ajuste de inventario
-     
+
     @PostMapping("/{id}/ajustar")
     public ResponseEntity<Producto> ajustarInventario(@PathVariable Long id, @RequestBody AjusteRequest ajuste) {
         // a. Validar la razón del ajuste
@@ -108,11 +127,12 @@ public class ProductoController {
         producto.setExistencias(nuevasExistencias);
         Producto actualizado = productoService.save(producto);
 
-        System.out.println("Ajustando inventario para producto " + id + ". Cantidad: " + ajuste.cantidad + ", Razón: " + ajuste.razon);
+
+        log.info("Ajustando inventario para producto {}. Cantidad: {}, Razón: {}", id, ajuste.cantidad, ajuste.razon);
 
         return ResponseEntity.ok(actualizado); // Devuelve 200 OK con el producto
     }
-    
+
     // 7. DELETE /productos/{id} – Eliminar un producto
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminarProducto(@PathVariable Long id) {
@@ -123,7 +143,7 @@ public class ProductoController {
         return ResponseEntity.noContent().build();
     }
 
-    //8 DELETE /productos – Eliminar varios productos por IDs
+    // 8 DELETE /productos – Eliminar varios productos por IDs
     @DeleteMapping("/batch-delete")
     public ResponseEntity<Void> eliminarVariosProductos(@RequestParam List<Long> ids) {
         productoService.deleteAllByIds(ids);
@@ -132,7 +152,8 @@ public class ProductoController {
 
     // 9 Post /productos/activar – Activar o desactivar varios productos por IDs
     @PostMapping("/batch-activar")
-    public ResponseEntity<Void> activarDesactivarVariosProductos(@RequestParam List<Long> ids, @RequestParam boolean activar) {
+    public ResponseEntity<Void> activarDesactivarVariosProductos(@RequestParam List<Long> ids,
+            @RequestParam boolean activar) {
         productoService.activarDesactivarProductos(ids, activar);
         return ResponseEntity.noContent().build();
     }
