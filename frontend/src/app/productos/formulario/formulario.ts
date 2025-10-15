@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ProductoService, Producto } from '../producto';
+import { ProductoService } from '../producto';
 
 
 @Component({
@@ -33,16 +33,16 @@ export class FormularioProductoComponent {
       this.productoForm.markAllAsTouched(); // Marca todos los campos como "tocados" para mostrar errores
       return;
     }
-    this.productoService.crearProducto(this.productoForm.value).subscribe(
-      response => {
+    this.productoService.crearProducto(this.productoForm.value).subscribe({
+      next: response => {
         console.log('Producto creado:', response);
         alert('Producto creado exitosamente.');
       },
-      error => {
+      error: error => {
         console.error('Error al crear producto:', error);
         alert('Error al crear el producto. Inténtalo de nuevo más tarde.');
       }
-    );
+    });
   }
 
   get f() {
