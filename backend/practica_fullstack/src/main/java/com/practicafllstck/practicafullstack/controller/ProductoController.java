@@ -139,8 +139,25 @@ public class ProductoController {
    * Clase auxiliar para recibir los datos de ajuste de inventario.
    */
   public static class AjusteRequest {
-    public int cantidad;
-    public String razon;
+    private int cantidad; // Cantidad a ajustar (positiva o negativa)
+    private String razon; // Razón del ajuste
+
+    // Getters y Setters
+    public int getCantidad() {
+      return cantidad;
+    }
+
+    public void setCantidad(int cantidad) {
+      this.cantidad = cantidad;
+    }
+
+    public String getRazon() {
+      return razon;
+    }
+
+    public void setRazon(String razon) {
+      this.razon = razon;
+    }
   }
 
   // 6. POST /productos/{id}/ajustar – Ajuste de inventario
