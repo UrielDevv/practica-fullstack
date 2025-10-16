@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -35,7 +36,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 public class ProductoController {
   private static final Logger log = LogManager.getLogger(ProductoController.class);
-  private ProductoService productoService;
+  private final ProductoService productoService;
+
+  @Autowired
+  public ProductoController(ProductoService productoService) {
+    this.productoService = productoService;
+  }
 
   // 1. GET /productos – Listar con paginación como:
   /**
@@ -133,8 +139,8 @@ public class ProductoController {
    * Clase auxiliar para recibir los datos de ajuste de inventario.
    */
   public static class AjusteRequest {
-    int cantidad;
-    String razon;
+    public int cantidad;
+    public String razon;
   }
 
   // 6. POST /productos/{id}/ajustar – Ajuste de inventario

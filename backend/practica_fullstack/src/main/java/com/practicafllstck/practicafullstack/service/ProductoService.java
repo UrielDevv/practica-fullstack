@@ -3,21 +3,26 @@ package com.practicafllstck.practicafullstack.service;
 
 import com.practicafllstck.practicafullstack.model.Producto;
 import com.practicafllstck.practicafullstack.repository.ProductoRepository;
-import org.springframework.stereotype.Service;
+import jakarta.transaction.Transactional;
+import java.util.List;
+import java.util.Optional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
-import static com.practicafllstck.practicafullstack.repository.specifications.ProductoSpecifications.*;
-import jakarta.transaction.Transactional;
+import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import static com.practicafllstck.practicafullstack.repository.specifications.ProductoSpecifications.*;
+
 
 @Service // Anotación que marca esta clase como un componente de servicio de Spring
 public class ProductoService {
+    private final ProductoRepository productoRepository;
 
-    // Inyección de dependencias: Spring nos proporciona una instancia de ProductoRepository
-    private ProductoRepository productoRepository;
+    @Autowired
+    public ProductoService(ProductoRepository productoRepository) {
+        this.productoRepository = productoRepository;
+    }
 
     public Page<Producto> findAll(Integer id, String nombre, String marca,
                                   Double precio, Integer existencias,
